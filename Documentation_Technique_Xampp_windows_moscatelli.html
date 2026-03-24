@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation XAMPP Windows - Moscatelli</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .logo {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .logo-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1e3c72;
+            letter-spacing: 2px;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.9em;
+            color: #2a5298;
+            margin-top: 5px;
+        }
+        
+        .header-title {
+            flex: 1;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        h3 {
+            color: #2a5298;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+        
+        .command {
+            color: #50fa7b;
+        }
+        
+        .comment {
+            color: #6272a4;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background: #2a5298;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .file-structure {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+
+        .screenshot {
+            background: #e9ecef;
+            border: 2px dashed #6c757d;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #6c757d;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .card {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <div class="logo-text">MOSCATELLI</div>
+                <div class="logo-subtitle">Ventilation | Chauffonnerie blanche | Usinage | Maintenance</div>
+            </div>
+            <div class="header-title">
+                <h1>Documentation Technique Windows</h1>
+                <p>Installation et Configuration XAMPP - Système GestionCharge</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Introduction -->
+        <div class="card">
+            <h2>📋 Présentation du Projet</h2>
+            <p><strong>Projet :</strong> Système de Gestion de Charges - Moscatelli</p>
+            <p><strong>Nom du site :</strong> gestioncharge</p>
+            <p><strong>Base de données :</strong> gestioncharge_mosca</p>
+            <p><strong>Plateforme :</strong> Windows (VM ou PC)</p>
+            <p><strong>Date :</strong> Décembre 2025</p>
+            
+            <h3>Spécifications Techniques</h3>
+            <table>
+                <tr>
+                    <th>Composant</th>
+                    <th>Détails</th>
+                </tr>
+                <tr>
+                    <td>Système d'exploitation</td>
+                    <td>Windows 10/11 (VM ou physique)</td>
+                </tr>
+                <tr>
+                    <td>Serveur Web</td>
+                    <td>Apache (XAMPP)</td>
+                </tr>
+                <tr>
+                    <td>Base de données</td>
+                    <td>MySQL/MariaDB</td>
+                </tr>
+                <tr>
+                    <td>Langage</td>
+                    <td>PHP 8.2.12</td>
+                </tr>
+                <tr>
+                    <td>Espace disque requis</td>
+                    <td>Minimum 2 GB</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Prérequis -->
+        <div class="card">
+            <h2>✅ Prérequis</h2>
+            
+            <h3>Vérifications avant installation</h3>
+            <ul>
+                <li>✅ Windows 10 ou supérieur</li>
+                <li>✅ Droits administrateur sur la machine</li>
+                <li>✅ Minimum 2 GB d'espace disque disponible</li>
+                <li>✅ Ports 80 (Apache) et 3306 (MySQL) disponibles</li>
+                <li>✅ Pare-feu Windows configuré (autorisations nécessaires)</li>
+            </ul>
+
+            <h3>Désactiver les services conflictuels</h3>
+            <div class="warning">
+                ⚠️ <strong>Important :</strong> Si vous avez déjà un serveur web ou MySQL installé (IIS, Apache, MySQL), vous devez les arrêter ou les désinstaller pour éviter les conflits de ports.
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Désactiver IIS (si installé)</strong>
+            </div>
+            <ol>
+                <li>Ouvrir le <strong>Panneau de configuration</strong></li>
+                <li>Aller dans <strong>Programmes et fonctionnalités</strong></li>
+                <li>Cliquer sur <strong>Activer ou désactiver des fonctionnalités Windows</strong></li>
+                <li>Décocher <strong>Internet Information Services</strong></li>
+                <li>Redémarrer l'ordinateur</li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Vérifier les ports disponibles</strong>
+            </div>
+            <p>Ouvrir <strong>PowerShell</strong> ou <strong>CMD</strong> en tant qu'administrateur :</p>
+            <div class="code-block"><code><span class="comment"># Vérifier si le port 80 est utilisé</span>
+<span class="command">netstat -ano | findstr :80</span>
+
+<span class="comment"># Vérifier si le port 3306 est utilisé</span>
+<span class="command">netstat -ano | findstr :3306</span></code></div>
+            
+            <div class="info">
+                ℹ️ Si ces commandes retournent des résultats, un service utilise déjà ces ports. Vous devrez l'arrêter.
+            </div>
+        </div>
+
+        <!-- Installation XAMPP -->
+        <div class="card">
+            <h2>🔧 Installation de XAMPP sur Windows</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Téléchargement de XAMPP</strong>
+            </div>
+            <ol>
+                <li>Aller sur le site officiel : <strong>https://www.apachefriends.org/</strong></li>
+                <li>Cliquer sur <strong>XAMPP for Windows</strong></li>
+                <li>Télécharger la version <strong>8.2.12</strong> (ou la plus récente)</li>
+                <li>Sauvegarder le fichier <code>xampp-windows-x64-8.2.12-0-VS16-installer.exe</code></li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Lancement de l'installation</strong>
+            </div>
+            <ol>
+                <li><strong>Double-cliquer</strong> sur le fichier téléchargé</li>
+                <li>Si Windows affiche un avertissement de sécurité, cliquer sur <strong>Oui</strong></li>
+                <li>Si l'UAC (User Account Control) demande confirmation, cliquer sur <strong>Oui</strong></li>
+            </ol>
+
+            <div class="warning">
+                ⚠️ <strong>Attention :</strong> Si vous voyez un message concernant l'antivirus, il est recommandé d'ajouter XAMPP aux exceptions de votre antivirus pour éviter les problèmes de performance.
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Configuration de l'installation</strong>
+            </div>
+            <ol>
+                <li>Écran de bienvenue : cliquer sur <strong>Next</strong></li>
+                <li><strong>Sélectionner les composants</strong> à installer :
+                    <ul>
+                        <li>☑ Apache</li>
+                        <li>☑ MySQL</li>
+                        <li>☑ PHP</li>
+                        <li>☑ phpMyAdmin</li>
+                        <li>☐ Perl (optionnel)</li>
+                        <li>☐ Tomcat (optionnel)</li>
+                        <li>☐ Webalizer (optionnel)</li>
+                    </ul>
+                </li>
+                <li>Cliquer sur <strong>Next</strong></li>
+                <li><strong>Choisir le dossier d'installation</strong> (par défaut : <code>C:\xampp</code>)</li>
+                <li>Cliquer sur <strong>Next</strong></li>
+                <li>Décocher <strong>Learn more about Bitnami</strong> (optionnel)</li>
+                <li>Cliquer sur <strong>Next</strong></li>
+                <li>Cliquer sur <strong>Next</strong> pour commencer l'installation</li>
+            </ol>
+
+            <div class="info">
+                ℹ️ <strong>Recommandation :</strong> Utilisez le dossier d'installation par défaut <code>C:\xampp</code> pour simplifier la configuration.
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Finalisation de l'installation</strong>
+            </div>
+            <ol>
+                <li>Attendre la fin de l'installation (2-3 minutes)</li>
+                <li>Cocher <strong>Do you want to start the Control Panel now?</strong></li>
+                <li>Cliquer sur <strong>Finish</strong></li>
+            </ol>
+
+            <div class="success">
+                ✅ XAMPP est maintenant installé !
+            </div>
+        </div>
+
+        <!-- Configuration Pare-feu -->
+        <div class="card">
+            <h2>🔥 Configuration du Pare-feu Windows</h2>
+            
+            <div class="warning">
+                ⚠️ Au premier lancement d'Apache et MySQL, Windows Firewall vous demandera d'autoriser l'accès réseau. <strong>Acceptez ces autorisations.</strong>
+            </div>
+
+            <h3>Si le pare-feu bloque Apache ou MySQL</h3>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Ouvrir les paramètres du pare-feu</strong>
+            </div>
+            <ol>
+                <li>Ouvrir le <strong>Panneau de configuration</strong></li>
+                <li>Aller dans <strong>Système et sécurité</strong> → <strong>Pare-feu Windows Defender</strong></li>
+                <li>Cliquer sur <strong>Paramètres avancés</strong> (à gauche)</li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Créer des règles entrantes</strong>
+            </div>
+            <ol>
+                <li>Cliquer sur <strong>Règles de trafic entrant</strong></li>
+                <li>Cliquer sur <strong>Nouvelle règle...</strong> (à droite)</li>
+                <li>Sélectionner <strong>Programme</strong> → Next</li>
+                <li>Choisir <strong>Ce chemin d'accès du programme</strong> : <code>C:\xampp\apache\bin\httpd.exe</code></li>
+                <li>Sélectionner <strong>Autoriser la connexion</strong> → Next</li>
+                <li>Cocher <strong>Domaine, Privé, Public</strong> → Next</li>
+                <li>Nom : <code>Apache XAMPP</code> → Terminer</li>
+            </ol>
+
+            <p>Répéter pour MySQL avec le chemin : <code>C:\xampp\mysql\bin\mysqld.exe</code></p>
+        </div>
+
+        <!-- XAMPP Control Panel -->
+        <div class="card">
+            <h2>🎮 Utilisation du XAMPP Control Panel</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Démarrer le Control Panel</strong>
+            </div>
+            <ol>
+                <li>Double-cliquer sur l'icône <strong>XAMPP Control Panel</strong> sur le bureau</li>
+                <li>Ou lancer depuis : <code>C:\xampp\xampp-control.exe</code></li>
+                <li>Clic droit → <strong>Exécuter en tant qu'administrateur</strong> (recommandé)</li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Démarrer les services</strong>
+            </div>
+            <ol>
+                <li>Cliquer sur <strong>Start</strong> à côté d'<strong>Apache</strong></li>
+                <li>Cliquer sur <strong>Start</strong> à côté de <strong>MySQL</strong></li>
+            </ol>
+
+            <div class="success">
+                ✅ Les modules doivent s'afficher en <strong>vert</strong> avec la mention "Running"
+            </div>
+
+            <h3>Boutons utiles du Control Panel</h3>
+            <table>
+                <tr>
+                    <th>Bouton</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td><strong>Start/Stop</strong></td>
+                    <td>Démarrer ou arrêter un service</td>
+                </tr>
+                <tr>
+                    <td><strong>Admin</strong></td>
+                    <td>Ouvrir l'interface web (Apache) ou phpMyAdmin (MySQL)</td>
+                </tr>
+                <tr>
+                    <td><strong>Config</strong></td>
+                    <td>Modifier les fichiers de configuration</td>
+                </tr>
+                <tr>
+                    <td><strong>Logs</strong></td>
+                    <td>Consulter les logs d'erreur</td>
+                </tr>
+                <tr>
+                    <td><strong>Shell</strong></td>
+                    <td>Ouvrir un terminal avec les outils XAMPP</td>
+                </tr>
+                <tr>
+                    <td><strong>Netstat</strong></td>
+                    <td>Voir les ports utilisés</td>
+                </tr>
+            </table>
+
+            <h3>Vérifier l'installation</h3>
+            <ol>
+                <li>Ouvrir un navigateur web</li>
+                <li>Aller sur : <code>http://localhost</code></li>
+                <li>Vous devriez voir la page d'accueil XAMPP</li>
+                <li>Tester phpMyAdmin : <code>http://localhost/phpmyadmin</code></li>
+            </ol>
+        </div>
+
+        <!-- Configuration Site -->
+        <div class="card">
+            <h2>🌐 Configuration du Site GestionCharge</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Création du dossier du site</strong>
+            </div>
+            <ol>
+                <li>Ouvrir l'<strong>Explorateur de fichiers</strong></li>
+                <li>Naviguer vers : <code>C:\xampp\htdocs</code></li>
+                <li>Créer un nouveau dossier nommé : <code>gestioncharge</code></li>
+            </ol>
+
+            <div class="info">
+                ℹ️ Le dossier <code>htdocs</code> est la racine web de XAMPP. Tous vos sites doivent être placés ici.
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Structure des fichiers</strong>
+            </div>
+            <div class="file-structure">C:\xampp\htdocs\gestioncharge\
+├── _assets\
+├── config\
+│   ├── cahier des charges RAF stage Antoine_Rev01.pptx
+│   ├── Config.php
+│   ├── structure_tables.sql
+│   └── .~lock.cahier des charges RAF stage Antoine_Rev01.pptx#
+├── css\
+│   ├── dashboard.css
+│   ├── excel.css
+│   └── login.css
+├── modules\
+│   └── blog\
+│       ├── controllers\
+│       │   ├── ChargeController.php
+│       │   ├── DashboardController.php
+│       │   └── LoginController.php
+│       ├── models\
+│       │   ├── converted\
+│       │   ├── AjoutChargeModel.php
+│       │   ├── ChargeModel.php
+│       │   ├── DashboardModel.php
+│       │   ├── ExcelToBdModel.php
+│       │   ├── GraphGeneratorModel.php
+│       │   ├── ImportModel.php
+│       │   ├── LectureDossierModel.php
+│       │   ├── LoginModel.php
+│       │   ├── MppConverterModel.php
+│       │   ├── ParcourstempModel.php
+│       │   └── SingletonModel.php
+│       └── views\
+├── uploads\
+│   ├── converttest.docx
+│   ├── jejenesuispasla.mpp
+│   └── mdp_alwaysdata.txt
+├── vendor\
+├── composer.json
+└── composer.lock</div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Configurer les permissions (si nécessaire)</strong>
+            </div>
+            <ol>
+                <li>Clic droit sur le dossier <code>gestioncharge</code></li>
+                <li>Propriétés → Onglet <strong>Sécurité</strong></li>
+                <li>S'assurer que <strong>Utilisateurs</strong> a les droits de lecture/écriture</li>
+                <li>Pour le dossier <code>uploads</code>, autoriser la modification</li>
+            </ol>
+        </div>
+
+        <!-- Base de données -->
+        <div class="card">
+            <h2>🗄️ Configuration de la Base de Données</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Accès à phpMyAdmin</strong>
+            </div>
+            <ol>
+                <li>S'assurer que MySQL est démarré dans XAMPP Control Panel</li>
+                <li>Ouvrir un navigateur</li>
+                <li>Aller sur : <code>http://localhost/phpmyadmin</code></li>
+                <li>Se connecter (par défaut : utilisateur <code>root</code>, mot de passe vide)</li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Création de la base de données</strong>
+            </div>
+            <ol>
+                <li>Dans phpMyAdmin, cliquer sur l'onglet <strong>Bases de données</strong></li>
+                <li>Dans "Créer une base de données" :
+                    <ul>
+                        <li>Nom : <code>gestioncharge_mosca</code></li>
+                        <li>Interclassement : <code>utf8mb4_general_ci</code></li>
+                    </ul>
+                </li>
+                <li>Cliquer sur <strong>Créer</strong></li>
+            </ol>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Création des tables via SQL</strong>
+            </div>
+            <ol>
+                <li>Sélectionner la base <code>gestioncharge_mosca</code> dans la liste de gauche</li>
+                <li>Cliquer sur l'onglet <strong>SQL</strong></li>
+                <li>Copier-coller les requêtes SQL suivantes</li>
+            </ol>
+
+            <h3>Table Utilisateurs</h3>
+            <div class="code-block"><code>CREATE TABLE Utilisateurs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'technicien', 'utilisateur') DEFAULT 'utilisateur',
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    derniere_connexion TIMESTAMP NULL,
+    actif BOOLEAN DEFAULT TRUE,
+    INDEX idx_email (email),
+    INDEX idx_role (role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;</code></div>
+
+            <h3>Table Donnees</h3>
+            <div class="code-block"><code>CREATE TABLE `Donnees` (
+    `Processus` varchar(40) NOT NULL,
+    `Tache` varchar(200) NOT NULL,
+    `Charge` decimal(15,2) DEFAULT NULL,
+    `Date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;</code></div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Insertion de données de test</strong>
+            </div>
+            <div class="code-block"><code><span class="comment">-- Insérer des utilisateurs de test</span>
+INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, role) VALUES
+('Moscatelli', 'Admin', 'admin@moscatelli.fr', MD5('Admin2024'), 'admin'),
+('Dupont', 'Jean', 'jean.dupont@moscatelli.fr', MD5('Tech2024'), 'technicien'),
+('Martin', 'Sophie', 'sophie.martin@moscatelli.fr', MD5('User2024'), 'utilisateur');
+
+<span class="comment">-- Insérer des données de test</span>
+INSERT INTO Donnees (Processus, Tache, Charge, Date) VALUES
+('Ventilation', 'Installation système ventilation Bâtiment A', 150.50, '2025-01-15'),
+('Chauffonnerie', 'Maintenance chaudière principale', 85.00, '2024-12-20'),
+('Usinage', 'Fabrication pièce spéciale client XYZ', 120.75, '2025-01-30'),
+('Maintenance', 'Contrôle annuel équipements', 45.00, '2025-02-10'),
+('Ventilation', 'Révision conduits zone production', 98.25, '2025-01-25');</code></div>
+
+            <div class="success">
+                ✅ Base de données créée et remplie avec succès !
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Alternative : Importer depuis un fichier SQL</strong>
+            </div>
+            <ol>
+                <li>Sauvegarder le script SQL complet dans un fichier : <code>structure_tables.sql</code></li>
+                <li>Dans phpMyAdmin, onglet <strong>Importer</strong></li>
+                <li>Cliquer sur <strong>Choisir un fichier</strong></li>
+                <li>Sélectionner votre fichier <code>structure_tables.sql</code></li>
+                <li>Cliquer sur <strong>Exécuter</strong></li>
+            </ol>
+        </div>
+
+        <!-- Fichiers PHP -->
+        <div class="card">
+            <h2>📝 Configuration PHP</h2>
+            
+            <h3>Fichier Config.php</h3>
+            <p>Créer le fichier : <code>C:\xampp\htdocs\gestioncharge\config\Config.php</code></p>
+            
+            <div class="code-block"><code>&lt;?php
+<span class="comment">// Configuration de la connexion à la base de données Moscatelli</span>
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'gestioncharge_mosca');
+define('DB_PORT', '3306');
+
+<span class="comment">// Informations société</span>
+define('COMPANY_NAME', 'MOSCATELLI');
+define('COMPANY_SLOGAN', 'Ventilation | Chauffonnerie blanche | Usinage | Maintenance');
+
+<span class="comment">// Créer la connexion PDO</span>
+try {
+    $pdo = new PDO(
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+        

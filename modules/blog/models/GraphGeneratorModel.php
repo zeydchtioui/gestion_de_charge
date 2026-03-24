@@ -59,24 +59,35 @@ class GraphGeneratorModel {
     }
 
     /**
+     * Function pour la journalisation avec timestamp
+     *
+     * @param string $message Message à logger
+     */
+    private function log_message($message) {
+        $timestamp = date('[Y-m-d H:i:s]');
+        echo $timestamp . " " . $message . "\n";
+    }
+
+    /**
      * Charge JPGraph avec les namespaces modernes
      *
      * @return bool True si JPGraph est chargé avec succès
      */
     private function loadJpGraph() {
         try {
-            $this->console_log("Tentative de chargement JPGraph moderne...");
+
+            //$this->log_message("Tentative de chargement JPGraph moderne...");
 
             // Vérifier que les classes sont disponibles via Composer
             if (class_exists('Amenadiel\\JpGraph\\Graph\\Graph') && class_exists('Amenadiel\\JpGraph\\Plot\\BarPlot')) {
-                $this->console_log("Classes JPGraph modernes disponibles");
+                //$this->log_message("Classes JPGraph modernes disponibles");
                 return true;
             } else {
-                $this->console_log("ERREUR: Classes JPGraph modernes non disponibles");
+                $this->log_message("ERREUR: Classes JPGraph modernes non disponibles");
                 return false;
             }
         } catch (\Exception $e) {
-            $this->console_log("ERREUR chargement JPGraph: " . $e->getMessage());
+            $this->log_message("ERREUR chargement JPGraph: " . $e->getMessage());
             return false;
         }
     }
@@ -88,35 +99,36 @@ class GraphGeneratorModel {
      * @return array Chemins des images générées pour chaque catégorie
      */
     public function generatePeriodCharts($periodData) {
-        $this->console_log("=== GÉNÉRATION GRAPHIQUES PÉRIODE LIBRE (PAR SEMAINES) ===");
-        $this->console_log("JPGraph chargé: " . ($this->jpgraphLoaded ? 'OUI' : 'NON'));
+//        $this->log_message("=== GÉNÉRATION GRAPHIQUES PÉRIODE LIBRE (PAR SEMAINES) ===");
+//        $this->log_message("JPGraph chargé: " . ($this->jpgraphLoaded ? 'OUI' : 'NON'));
+        //var_dump($this->jpgraphLoaded); die('fdfdfdfdf');
 
         if (!$this->jpgraphLoaded) {
-            $this->console_log("JPGraph non disponible, génération d'images d'erreur");
+            //$this->log_message("JPGraph non disponible, génération d'images d'erreur");
             return $this->generateErrorImages("JPGraph non installé ou non chargé");
         }
 
         // NETTOYAGE COMPLET avant génération
         $this->cleanupAllCharts();
 
-        $this->console_log("Données reçues pour la période: " . json_encode(array_keys($periodData)));
+        //$this->log_message("Données reçues pour la période: " . json_encode(array_keys($periodData)));
 
         // Vérifier la présence des métadonnées de période
         if (!isset($periodData['periode_info'])) {
-            $this->console_log("ERREUR: Métadonnées periode_info manquantes");
+            //$this->log_message("ERREUR: Métadonnées periode_info manquantes");
             return $this->generateErrorImages("Métadonnées de période manquantes");
         }
 
         $periodeInfo = $periodData['periode_info'];
-        $this->console_log("Période: " . $periodeInfo['debut'] . " → " . $periodeInfo['fin'] . " (" . ($periodeInfo['nombre_semaines'] ?? 'N/A') . " semaines)");
+        //$this->log_message("Période: " . $periodeInfo['debut'] . " → " . $periodeInfo['fin'] . " (" . ($periodeInfo['nombre_semaines'] ?? 'N/A') . " semaines)");
 
         // Vérifier la présence des labels de semaines
         if (!isset($periodData['semaines_labels'])) {
-            $this->console_log("ERREUR: Labels semaines_labels manquants");
+            //$this->log_message("ERREUR: Labels semaines_labels manquants");
             return $this->generateErrorImages("Labels de semaines manquants");
         }
 
-        $this->console_log("Labels semaines disponibles: " . count($periodData['semaines_labels']));
+        //$this->log_message("Labels semaines disponibles: " . count($periodData['semaines_labels']));
 
         $chartPaths = [
             'production' => null,
@@ -129,35 +141,53 @@ class GraphGeneratorModel {
             // Calculer la largeur dynamique du graphique (basé sur les semaines)
             $nombreSemaines = $periodeInfo['nombre_semaines'] ?? count($periodData['semaines_labels']);
             $chartWidth = $this->calculateChartWidthWeekly($nombreSemaines);
-            $this->console_log("Largeur calculée pour " . $nombreSemaines . " semaines: " . $chartWidth . "px");
+            //$this->log_message("Largeur calculée pour " . $nombreSemaines . " semaines: " . $chartWidth . "px");
 
             // Générer tous les graphiques (même vides)
             $categories = ['production', 'etude', 'methode', 'qualite'];
             foreach ($categories as $cat) {
-                $this->console_log("Génération graphique " . $cat . " pour la période (semaines)");
+                $this->log_message("Génération graphique " . $cat . " pour la période (semaines)");
                 switch ($cat) {
                     case 'production':
-                        $chartPaths['production'] = $this->generatePeriodProductionChartWeekly($periodData, $chartWidth);
+                        $result  = $this->generatePeriodProductionChartWeekly($periodData, $chartWidth);
+                        $chartPaths['production_chart']         = $result['chart'];
+                        $chartPaths['production_legend']        = $result['legend'];
+                        $chartPaths['production_periode_info']  = $result['periode'];
+                        $chartPaths['production_periode_titre'] = $result['periode']['titre'];
                         break;
+
                     case 'etude':
-                        $chartPaths['etude'] = $this->generatePeriodEtudeChartWeekly($periodData, $chartWidth);
+                        $result  = $this->generatePeriodEtudeChartWeekly($periodData, $chartWidth);
+                        $chartPaths['etude_chart']          = $result['chart'];
+                        $chartPaths['etude_legend']         = $result['legend'];
+                        $chartPaths['etude_periode_info']   = $result['periode'];
+                        $chartPaths['etude_periode_titre']  = $result['periode']['titre'];
                         break;
+
                     case 'methode':
-                        $chartPaths['methode'] = $this->generatePeriodMethodeChartWeekly($periodData, $chartWidth);
+                        $result  = $this->generatePeriodMethodeChartWeekly($periodData, $chartWidth);
+                        $chartPaths['methode_chart']            = $result['chart'];
+                        $chartPaths['methode_legend']           = $result['legend'];
+                        $chartPaths['methode_periode_info']     = $result['periode'];
+                        $chartPaths['methode_periode_titre']    = $result['periode']['titre'];
                         break;
+
                     case 'qualite':
-                        $chartPaths['qualite'] = $this->generatePeriodQualiteChartWeekly($periodData, $chartWidth);
+                        $result  = $this->generatePeriodQualiteChartWeekly($periodData, $chartWidth);
+                        $chartPaths['qualite_chart']            = $result['chart'];
+                        $chartPaths['qualite_legend']           = $result['legend'];
+                        $chartPaths['qualite_periode_info']     = $result['periode'];
+                        $chartPaths['qualite_periode_titre']    = $result['periode']['titre'];
                         break;
                 }
             }
 
-            $this->console_log("Génération période libre par semaines terminée");
+            //$this->log_message("Génération période libre par semaines terminée");
 
         } catch (\Exception $e) {
-            $this->console_log("Erreur génération graphiques période libre par semaines: " . $e->getMessage());
+            $this->log_message("Erreur génération graphiques période libre par semaines: " . $e->getMessage());
             $chartPaths = $this->generateErrorImages($e->getMessage());
         }
-
         return $chartPaths;
     }
 
@@ -174,7 +204,7 @@ class GraphGeneratorModel {
         // Appliquer les limites min/max
         $finalWidth = max(self::CHART_MIN_WIDTH, min(self::CHART_MAX_WIDTH, $calculatedWidth));
 
-        $this->console_log("Calcul largeur: base(" . self::CHART_BASE_WIDTH . ") + semaines(" . $nombreSemaines . ") * largeur_par_semaine(" . self::WIDTH_PER_WEEK . ") = " . $calculatedWidth . "px → " . $finalWidth . "px (avec limites)");
+        //$this->log_message("Calcul largeur: base(" . self::CHART_BASE_WIDTH . ") + semaines(" . $nombreSemaines . ") * largeur_par_semaine(" . self::WIDTH_PER_WEEK . ") = " . $calculatedWidth . "px → " . $finalWidth . "px (avec limites)");
 
         return $finalWidth;
     }
@@ -187,11 +217,13 @@ class GraphGeneratorModel {
      * @return string Chemin de l'image générée
      */
     private function generatePeriodProductionChartWeekly($data, $chartWidth) {
-        $this->console_log("=== GÉNÉRATION GRAPHIQUE PRODUCTION PÉRIODE LIBRE (SEMAINES) ===");
-        $this->console_log("🔄 MISE À JOUR: Gestion 5 processus avec couleurs distinctes");
+//        $this->log_message("=== GÉNÉRATION GRAPHIQUE PRODUCTION PÉRIODE LIBRE (SEMAINES) ===");
+//        $this->log_message("🔄 MISE À JOUR: Gestion 5 processus avec couleurs distinctes");
 
-        $filename = 'production_weekly_' . date('Y-m-d_H-i-s') . '.png';
-        $filepath = self::CHARTS_FOLDER . $filename;
+        $chartFilename  = 'production_weekly_chart_'  . date('Y-m-d_H-i-s') . '.png';
+        $legendFilename = 'production_legend_' . date('Y-m-d_H-i-s') . '.png';
+        $chartFilepath  = self::CHARTS_FOLDER . $chartFilename;
+        $legendFilepath = self::CHARTS_FOLDER . $legendFilename;
 
         // RÉCUPÉRATION 5 DATASETS
         $chaudnq_data = $data['production']['CHAUDNQ'] ?? [];  // Chaudronnerie Non Qualifiée
@@ -199,6 +231,8 @@ class GraphGeneratorModel {
         $soudnq_data = $data['production']['SOUDNQ'] ?? [];    // Soudure Non Qualifiée
         $soudq_data = $data['production']['SOUDQ'] ?? [];      // Soudure Qualifiée
         $ct_data = $data['production']['CT'] ?? [];            // Contrôle
+        $usin_data = $data['production']['USIN'] ?? [];         // Usinage
+        $rbt_data = $data['production']['RBT'] ?? [];           // Robot
 
         // Si pas de données, créer des arrays vides avec la bonne taille
         $nombreSemaines = count($data['semaines_labels'] ?? []);
@@ -207,18 +241,13 @@ class GraphGeneratorModel {
         if (empty($soudnq_data)) $soudnq_data = array_fill(0, max(1, $nombreSemaines), 0);
         if (empty($soudq_data)) $soudq_data = array_fill(0, max(1, $nombreSemaines), 0);
         if (empty($ct_data)) $ct_data = array_fill(0, max(1, $nombreSemaines), 0);
-
-        // LOGGING ÉTENDU pour les 5 processus
-        $this->console_log("Chaudronnerie NQ (" . count($chaudnq_data) . " semaines): " . json_encode(array_slice($chaudnq_data, 0, 3)) . (count($chaudnq_data) > 3 ? '...' : ''));
-        $this->console_log(" Chaudronnerie Q (" . count($chaudq_data) . " semaines): " . json_encode(array_slice($chaudq_data, 0, 3)) . (count($chaudq_data) > 3 ? '...' : ''));
-        $this->console_log("Soudure NQ (" . count($soudnq_data) . " semaines): " . json_encode(array_slice($soudnq_data, 0, 3)) . (count($soudnq_data) > 3 ? '...' : ''));
-        $this->console_log(" Soudure Q (" . count($soudq_data) . " semaines): " . json_encode(array_slice($soudq_data, 0, 3)) . (count($soudq_data) > 3 ? '...' : ''));
-        $this->console_log("CT (" . count($ct_data) . " semaines): " . json_encode(array_slice($ct_data, 0, 3)) . (count($ct_data) > 3 ? '...' : ''));
+        if (empty($usin_data)) $usin_data = array_fill(0, max(1, $nombreSemaines), 0);
+        if (empty($rbt_data)) $rbt_data = array_fill(0, max(1, $nombreSemaines), 0);
 
         try {
             // CALCUL VALEUR MAX avec les 5 datasets
             $maxValue = 0;
-            foreach ([$chaudnq_data, $chaudq_data, $soudnq_data, $soudq_data, $ct_data] as $dataset) {
+            foreach ([$chaudnq_data, $chaudq_data, $soudnq_data, $soudq_data, $ct_data, $usin_data, $rbt_data] as $dataset) {
                 if (!empty($dataset)) {
                     $maxValue = max($maxValue, max($dataset));
                 }
@@ -226,16 +255,22 @@ class GraphGeneratorModel {
 
             // Définir l'échelle Y avec minimum de 3
             $yMax = max(3, ceil($maxValue * 1.2)); // 20% de marge au-dessus + minimum de 3
-            $this->console_log("Valeur max moyennes (5 processus): " . $maxValue . " → Axe Y fixé à: " . $yMax);
+            //$this->log_message("Valeur max moyennes (5 processus): " . $maxValue . " → Axe Y fixé à: " . $yMax);
 
+            // =====================
+            //  1) GRAPHIQUE SEUL
+            // =====================
             // Créer le graphique avec largeur dynamique
             $graph = new Graph($chartWidth, self::CHART_HEIGHT);
             $graph->SetScale('textlin', 0, $yMax); // Forcer l'axe Y de 0 à $yMax
             $graph->SetMargin(80, 40, 40, 80);
 
             // Titre et labels adaptés pour les semaines
-            $periodeInfo = $data['periode_info'];
-            $graph->title->Set('Charge Production par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
+            $graphTitle = 'Charge Production par Semaine - Période du ' . $data['periode_info']['debut'] . ' au ' . $data['periode_info']['fin'];
+            $periode['titre']   = $graphTitle;
+            $periode['info']  = $data['periode_info'];
+
+            //$graph->title->Set('Charge Production par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
             $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
             $graph->xaxis->title->Set('Semaines de la période sélectionnée');
             $graph->xaxis->title->SetFont(FF_ARIAL, FS_NORMAL, 12);
@@ -261,57 +296,150 @@ class GraphGeneratorModel {
             $barplot1 = new BarPlot($chaudnq_data);
             $barplot1->SetColor('#D32F2F');       // Rouge foncé
             $barplot1->SetFillColor('#D32F2F');
-            $barplot1->SetLegend('Chaudronnerie NQ');
+            //$barplot1->SetLegend('Chaudronnerie NQ');
             $barplots[] = $barplot1;
 
             // Chaudronnerie Qualifiée - ORANGE (bien distinct du rouge)
             $barplot2 = new BarPlot($chaudq_data);
             $barplot2->SetColor('#FF9800');       // Orange vif
             $barplot2->SetFillColor('#FF9800');
-            $barplot2->SetLegend('Chaudronnerie Q');
+            //$barplot2->SetLegend('Chaudronnerie Q');
             $barplots[] = $barplot2;
 
             // Soudure Non Qualifiée - BLEU
             $barplot3 = new BarPlot($soudnq_data);
             $barplot3->SetColor('#1976D2');       // Bleu foncé
             $barplot3->SetFillColor('#1976D2');
-            $barplot3->SetLegend('Soudure NQ');
+            //$barplot3->SetLegend('Soudure NQ');
             $barplots[] = $barplot3;
 
             // Soudure Qualifiée - VIOLET (bien distinct du bleu)
             $barplot4 = new BarPlot($soudq_data);
             $barplot4->SetColor('#9C27B0');       // Violet/Purple
             $barplot4->SetFillColor('#9C27B0');
-            $barplot4->SetLegend('Soudure Q');
+            //$barplot4->SetLegend('Soudure Q');
             $barplots[] = $barplot4;
 
             // Contrôle - VERT
             $barplot5 = new BarPlot($ct_data);
             $barplot5->SetColor('#4CAF50');       // Vert
             $barplot5->SetFillColor('#4CAF50');
-            $barplot5->SetLegend('Contrôle');
+            //$barplot5->SetLegend('Contrôle');
             $barplots[] = $barplot5;
 
-            $this->console_log("🎨 5 barres créées avec couleurs distinctes: Rouge, Orange, Bleu, Violet, Vert");
+            // Usinage - JAUNE
+            $barplot6 = new BarPlot($usin_data);
+            $barplot6->SetColor('#F9E79F');       // Jaune
+            $barplot6->SetFillColor('#F9E79F');
+            //$barplot6->SetLegend('Usinage');
+            $barplots[] = $barplot6;
 
-            // GROUPER LES 5 BARRES côte à côte pour chaque semaine
+            // Robot - BLEU
+            $barplot7 = new BarPlot($rbt_data);
+            $barplot7->SetColor('#AED6F1');       // Bleu
+            $barplot7->SetFillColor('#AED6F1');
+            //$barplot7->SetLegend('Robot');
+            $barplots[] = $barplot7;
+
+            //$this->log_message("🎨 7 barres créées avec couleurs distinctes: Rouge, Orange, Bleu, Violet, Vert, Jaune, Bleu");
+
+            // GROUPER LES 7 BARRES côte à côte pour chaque semaine
             if (count($barplots) > 1) {
                 $groupedBarPlot = new \Amenadiel\JpGraph\Plot\GroupBarPlot($barplots);
                 $graph->Add($groupedBarPlot);
             } else {
                 $graph->Add($barplots[0]);
             }
+            // Désactiver complètement la légende
+            $graph->legend->Hide();
+            $graph->Stroke($chartFilepath);
+            $this->console_log("Graphique (sans légende) sauvegardé : " . $chartFilename);
 
-            // Légende
-            $graph->legend->SetPos(0.05, 0.15, 'right', 'top');
+            // =====================
+            //  2) LÉGENDE SEULE
+            // =====================
+            $legendGraph = new Graph(400, 80); // Taille réduite, juste pour la légende
+            $legendGraph->SetScale('textlin', 0, 1);
+            $legendGraph->SetMargin(10, 10, 10, 10);
+            $legendGraph->SetFrame(false); // Pas de bordure autour du graphique légende
 
-            // Sauvegarder l'image
-            $graph->Stroke($filepath);
-            $this->console_log(" Graphique production période libre par semaines sauvegardé: " . $filename . " (" . $chartWidth . "x" . self::CHART_HEIGHT . ") avec 5 processus");
-            return $filename;
+            // CRÉATION DES 5 BARRES AVEC COULEURS BIEN DISTINCTES
+            $barplots = [];
+
+            // Chaudronnerie Non Qualifiée - ROUGE
+            $barplot1 = new BarPlot([0]);
+            $barplot1->SetColor('#D32F2F');       // Rouge foncé
+            $barplot1->SetFillColor('#D32F2F');
+            $barplot1->SetLegend('Chaudronnerie NQ');
+            $barplots[] = $barplot1;
+
+            // Chaudronnerie Qualifiée - ORANGE (bien distinct du rouge)
+            $barplot2 = new BarPlot([0]);
+            $barplot2->SetColor('#FF9800');       // Orange vif
+            $barplot2->SetFillColor('#FF9800');
+            $barplot2->SetLegend('Chaudronnerie Q');
+            $barplots[] = $barplot2;
+
+            // Soudure Non Qualifiée - BLEU
+            $barplot3 = new BarPlot([0]);
+            $barplot3->SetColor('#1976D2');       // Bleu foncé
+            $barplot3->SetFillColor('#1976D2');
+            $barplot3->SetLegend('Soudure NQ');
+            $barplots[] = $barplot3;
+
+            // Soudure Qualifiée - VIOLET (bien distinct du bleu)
+            $barplot4 = new BarPlot([0]);
+            $barplot4->SetColor('#9C27B0');       // Violet/Purple
+            $barplot4->SetFillColor('#9C27B0');
+            $barplot4->SetLegend('Soudure Q');
+            $barplots[] = $barplot4;
+
+            // Contrôle - VERT
+            $barplot5 = new BarPlot([0]);
+            $barplot5->SetColor('#4CAF50');       // Vert
+            $barplot5->SetFillColor('#4CAF50');
+            $barplot5->SetLegend('Contrôle');
+            $barplots[] = $barplot5;
+
+            // Usinage - JAUNE
+            $barplot6 = new BarPlot([0]);
+            $barplot6->SetColor('#F9E79F');       // Jaune
+            $barplot6->SetFillColor('#F9E79F');
+            $barplot6->SetLegend('Usinage');
+            $barplots[] = $barplot6;
+
+            // Robot - BLEU
+            $barplot7 = new BarPlot([0]);
+            $barplot7->SetColor('#AED6F1');       // Bleu
+            $barplot7->SetFillColor('#AED6F1');
+            $barplot7->SetLegend('Robot');
+            $barplots[] = $barplot7;
+
+            $legendGrouped = new \Amenadiel\JpGraph\Plot\GroupBarPlot($barplots);
+            $legendGraph->Add($legendGrouped);
+
+            // Positionner la légende au centre de cette petite image
+            $legendGraph->legend->SetPos(0.5, 0.5, 'center', 'center');
+            $legendGraph->legend->SetFrameWeight(1);
+
+            // Masquer axes et titre pour n'afficher que la légende
+            $legendGraph->xaxis->Hide();
+            $legendGraph->yaxis->Hide();
+            $legendGraph->title->Set('');
+
+            $legendGraph->Stroke($legendFilepath);
+            $this->console_log("Légende sauvegardée : " . $legendFilename);
+
+            $fullData = [
+                'chart'   => $chartFilename,
+                'legend'  => $legendFilename,
+                'periode' => $periode
+            ];
+
+            return $fullData;
 
         } catch (\Exception $e) {
-            $this->console_log("Erreur sauvegarde production période libre par semaines: " . $e->getMessage());
+            $this->log_message("Erreur sauvegarde production période libre par semaines: " . $e->getMessage());
             return $this->createErrorImage('production', 'Erreur sauvegarde: ' . $e->getMessage());
         }
     }
@@ -320,10 +448,13 @@ class GraphGeneratorModel {
      * Génère le graphique Étude pour une période libre (par semaines)
      */
     private function generatePeriodEtudeChartWeekly($data, $chartWidth) {
-        $this->console_log("=== GÉNÉRATION GRAPHIQUE ÉTUDE PÉRIODE LIBRE (SEMAINES) ===");
+        //$this->console_log("=== GÉNÉRATION GRAPHIQUE ÉTUDE PÉRIODE LIBRE (SEMAINES) ===");
 
-        $filename = 'etude_weekly_' . date('Y-m-d_H-i-s') . '.png';
-        $filepath = self::CHARTS_FOLDER . $filename;
+        $chartFilename  = 'etude_weekly_chart_'  . date('Y-m-d_H-i-s') . '.png';
+        $legendFilename = 'etude_legend_' . date('Y-m-d_H-i-s') . '.png';
+        $chartFilepath  = self::CHARTS_FOLDER . $chartFilename;
+        $legendFilepath = self::CHARTS_FOLDER . $legendFilename;
+        $periodeInfo    = $data['periode_info'];
 
         $calc_data = $data['etude']['CALC'] ?? [];
         $proj_data = $data['etude']['PROJ'] ?? [];
@@ -345,13 +476,16 @@ class GraphGeneratorModel {
             // Définir l'échelle Y avec minimum de 3
             $yMax = max(3, ceil($maxValue * 1.2)); // 20% de marge au-dessus + minimum de 3
 
+            // =====================
+            //  1) GRAPHIQUE SEUL
+            // =====================
             $graph = new Graph($chartWidth, self::CHART_HEIGHT);
-            $graph->SetScale('textlin', 0, $yMax); // Forcer l'axe Y de 0 à $yMax
+            $graph->SetScale('textlin', 0, $yMax);
             $graph->SetMargin(80, 40, 40, 80);
 
-            $periodeInfo = $data['periode_info'];
-            $graph->title->Set('Charge Étude par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
-            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
+
+//            $graph->title->Set('Charge Étude par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
+//            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
             $graph->xaxis->title->Set('Semaines de la période sélectionnée');
             $graph->yaxis->title->Set('Moyenne de personnes par semaine');
 
@@ -359,37 +493,72 @@ class GraphGeneratorModel {
             $graph->xaxis->SetTickLabels($labels);
 
             $nombreSemaines = count($labels);
-            if ($nombreSemaines > 8) {
-                $graph->xaxis->SetLabelAngle(90);
-            } else {
-                $graph->xaxis->SetLabelAngle(45);
-            }
-
-            $barplots = [];
+            $graph->xaxis->SetLabelAngle($nombreSemaines > 8 ? 90 : 45);
 
             $barplot1 = new BarPlot($calc_data);
             $barplot1->SetColor('orange');
             $barplot1->SetFillColor('orange');
-            $barplot1->SetLegend('Calcul');
-            $barplots[] = $barplot1;
+            // Pas de SetLegend() ici → pas de légende dans le graphique
 
             $barplot2 = new BarPlot($proj_data);
             $barplot2->SetColor('purple');
             $barplot2->SetFillColor('purple');
-            $barplot2->SetLegend('Projet');
-            $barplots[] = $barplot2;
 
-            if (count($barplots) > 1) {
-                $groupedBarPlot = new \Amenadiel\JpGraph\Plot\GroupBarPlot($barplots);
-                $graph->Add($groupedBarPlot);
-            } else {
-                $graph->Add($barplots[0]);
-            }
+            $groupedBarPlot = new \Amenadiel\JpGraph\Plot\GroupBarPlot([$barplot1, $barplot2]);
+            $graph->Add($groupedBarPlot);
 
-            $graph->legend->SetPos(0.05, 0.15, 'right', 'top');
-            $graph->Stroke($filepath);
-            $this->console_log("Graphique étude période libre par semaines sauvegardé: " . $filename . " (" . $chartWidth . "x" . self::CHART_HEIGHT . ")");
-            return $filename;
+            // Désactiver complètement la légende
+            $graph->legend->Hide();
+
+            $graph->Stroke($chartFilepath);
+            $this->console_log("Graphique (sans légende) sauvegardé : " . $chartFilename);
+
+            // Titre et labels adaptés pour les semaines
+            $graphTitle = 'Charge etude par Semaine - Période du ' . $data['periode_info']['debut'] . ' au ' . $data['periode_info']['fin'];
+            $periode['titre']   = $graphTitle;
+            $periode['info']  = $data['periode_info'];
+
+            // =====================
+            //  2) LÉGENDE SEULE
+            // =====================
+            $legendGraph = new Graph(200, 80); // Taille réduite, juste pour la légende
+            $legendGraph->SetScale('textlin', 0, 1);
+            $legendGraph->SetMargin(10, 10, 10, 10);
+            $legendGraph->SetFrame(false); // Pas de bordure autour du graphique légende
+
+            // Barres fantômes (données fictives) uniquement pour générer la légende
+            $lb1 = new BarPlot([0]);
+            $lb1->SetColor('orange');
+            $lb1->SetFillColor('orange');
+            $lb1->SetLegend('Calcul');
+
+            $lb2 = new BarPlot([0]);
+            $lb2->SetColor('purple');
+            $lb2->SetFillColor('purple');
+            $lb2->SetLegend('Projet');
+
+            $legendGrouped = new \Amenadiel\JpGraph\Plot\GroupBarPlot([$lb1, $lb2]);
+            $legendGraph->Add($legendGrouped);
+
+            // Positionner la légende au centre de cette petite image
+            $legendGraph->legend->SetPos(0.5, 0.5, 'center', 'center');
+            $legendGraph->legend->SetFrameWeight(1);
+
+            // Masquer axes et titre pour n'afficher que la légende
+            $legendGraph->xaxis->Hide();
+            $legendGraph->yaxis->Hide();
+            $legendGraph->title->Set('');
+
+            $legendGraph->Stroke($legendFilepath);
+            $this->console_log("Légende sauvegardée : " . $legendFilename);
+
+            $fullData = [
+                'chart'   => $chartFilename,
+                'legend'  => $legendFilename,
+                'periode' => $periode
+            ];
+
+            return $fullData;
 
         } catch (\Exception $e) {
             $this->console_log("Erreur sauvegarde étude période libre par semaines: " . $e->getMessage());
@@ -403,8 +572,12 @@ class GraphGeneratorModel {
     private function generatePeriodMethodeChartWeekly($data, $chartWidth) {
         $this->console_log("=== GÉNÉRATION GRAPHIQUE MÉTHODE PÉRIODE LIBRE (SEMAINES) ===");
 
-        $filename = 'methode_weekly_' . date('Y-m-d_H-i-s') . '.png';
-        $filepath = self::CHARTS_FOLDER . $filename;
+        $chartFilename  = 'methode_weekly_chart_'  . date('Y-m-d_H-i-s') . '.png';
+        $legendFilename = 'methode_legend_' . date('Y-m-d_H-i-s') . '.png';
+        $chartFilepath  = self::CHARTS_FOLDER . $chartFilename;
+        $legendFilepath = self::CHARTS_FOLDER . $legendFilename;
+        $periodeInfo    = $data['periode'];
+
 
         $meth_data = $data['methode']['METH'] ?? [];
 
@@ -422,13 +595,15 @@ class GraphGeneratorModel {
             // Définir l'échelle Y avec minimum de 3
             $yMax = max(3, ceil($maxValue * 1.2)); // 20% de marge au-dessus + minimum de 3
 
+            // =====================
+            //  1) GRAPHIQUE SEUL
+            // =====================
             $graph = new Graph($chartWidth, self::CHART_HEIGHT);
             $graph->SetScale('textlin', 0, $yMax); // Forcer l'axe Y de 0 à $yMax
             $graph->SetMargin(80, 40, 40, 80);
 
-            $periodeInfo = $data['periode_info'];
-            $graph->title->Set('Charge Méthode par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
-            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
+//            $graph->title->Set('Charge Méthode par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
+//            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
             $graph->xaxis->title->Set('Semaines de la période sélectionnée');
             $graph->yaxis->title->Set('Moyenne de personnes par semaine');
 
@@ -445,13 +620,57 @@ class GraphGeneratorModel {
             $barplot1 = new BarPlot($meth_data);
             $barplot1->SetColor('brown');
             $barplot1->SetFillColor('brown');
-            $barplot1->SetLegend('Méthode');
-            $graph->Add($barplot1);
 
-            $graph->legend->SetPos(0.05, 0.15, 'right', 'top');
-            $graph->Stroke($filepath);
-            $this->console_log("Graphique méthode période libre par semaines sauvegardé: " . $filename . " (" . $chartWidth . "x" . self::CHART_HEIGHT . ")");
-            return $filename;
+            $groupedBarPlot = new \Amenadiel\JpGraph\Plot\GroupBarPlot([$barplot1]);
+            $graph->Add($groupedBarPlot);
+
+            // Désactiver complètement la légende
+            $graph->legend->Hide();
+
+            $graph->Stroke($chartFilepath);
+            $this->console_log("Graphique (sans légende) sauvegardé : " . $chartFilename);
+
+            // Titre et labels adaptés pour les semaines
+            $graphTitle = 'Charge méthode par Semaine - Période du ' . $data['periode_info']['debut'] . ' au ' . $data['periode_info']['fin'];
+            $periode['titre']   = $graphTitle;
+            $periode['info']  = $data['periode_info'];
+
+            // =====================
+            //  2) LÉGENDE SEULE
+            // =====================
+            $legendGraph = new Graph(200, 100); // Petite image juste pour la légende
+            $legendGraph->SetScale('textlin');
+            $legendGraph->SetMargin(5, 5, 5, 5);
+            $legendGraph->SetFrame(false); // Pas de bordure
+
+            // Ajouter les mêmes barplots (vides) juste pour générer la légende
+            $dummyBar1 = new BarPlot([0]);
+            $dummyBar1->SetColor('orange');
+            $dummyBar1->SetFillColor('orange');
+            $dummyBar1->SetLegend('Méthode');
+
+            $dummyGroup = new \Amenadiel\JpGraph\Plot\GroupBarPlot([$dummyBar1]);
+            $legendGraph->Add($dummyGroup);
+
+            // Positionner la légende au centre de cette petite image
+            $legendGraph->legend->SetPos(0.5, 0.5, 'center', 'center');
+            $legendGraph->legend->SetFrameWeight(1);
+
+            // Masquer axes et titre pour n'afficher que la légende
+            $legendGraph->xaxis->Hide();
+            $legendGraph->yaxis->Hide();
+            $legendGraph->title->Set('');
+
+            $legendGraph->Stroke($legendFilepath);
+            $this->console_log("Légende sauvegardée : " . $legendFilename);
+
+            $fullData = [
+                'chart'   => $chartFilename,
+                'legend'  => $legendFilename,
+                'periode' => $periode
+            ];
+
+            return $fullData;
 
         } catch (\Exception $e) {
             $this->console_log("Erreur sauvegarde méthode période libre par semaines: " . $e->getMessage());
@@ -465,8 +684,11 @@ class GraphGeneratorModel {
     private function generatePeriodQualiteChartWeekly($data, $chartWidth) {
         $this->console_log("=== GÉNÉRATION GRAPHIQUE QUALITÉ PÉRIODE LIBRE (SEMAINES) ===");
 
-        $filename = 'qualite_weekly_' . date('Y-m-d_H-i-s') . '.png';
-        $filepath = self::CHARTS_FOLDER . $filename;
+        $chartFilename  = 'qualite_weekly_chart_'  . date('Y-m-d_H-i-s') . '.png';
+        $legendFilename = 'qualite_legend_' . date('Y-m-d_H-i-s') . '.png';
+        $chartFilepath  = self::CHARTS_FOLDER . $chartFilename;
+        $legendFilepath = self::CHARTS_FOLDER . $legendFilename;
+        $periodeInfo    = $data['periode_info'];
 
         $qual_data = $data['qualite']['QUAL'] ?? [];
         $quals_data = $data['qualite']['QUALS'] ?? [];
@@ -488,13 +710,15 @@ class GraphGeneratorModel {
             // Définir l'échelle Y avec minimum de 3
             $yMax = max(3, ceil($maxValue * 1.2)); // 20% de marge au-dessus + minimum de 3
 
+            // =====================
+            //  1) GRAPHIQUE SEUL
+            // =====================
             $graph = new Graph($chartWidth, self::CHART_HEIGHT);
             $graph->SetScale('textlin', 0, $yMax); // Forcer l'axe Y de 0 à $yMax
             $graph->SetMargin(80, 40, 40, 80);
 
-            $periodeInfo = $data['periode_info'];
-            $graph->title->Set('Charge Qualité par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
-            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
+//            $graph->title->Set('Charge Qualité par Semaine - Période du ' . $periodeInfo['debut'] . ' au ' . $periodeInfo['fin']);
+//            $graph->title->SetFont(FF_ARIAL, FS_BOLD, 16);
             $graph->xaxis->title->Set('Semaines de la période sélectionnée');
             $graph->yaxis->title->Set('Moyenne de personnes par semaine');
 
@@ -509,7 +733,6 @@ class GraphGeneratorModel {
             }
 
             $barplots = [];
-
             $barplot1 = new BarPlot($qual_data);
             $barplot1->SetColor('darkblue');
             $barplot1->SetFillColor('darkblue');
@@ -522,17 +745,67 @@ class GraphGeneratorModel {
             $barplot2->SetLegend('Qualité Spécialisée');
             $barplots[] = $barplot2;
 
-            if (count($barplots) > 1) {
+            //if (count($barplots) > 1) {
                 $groupedBarPlot = new \Amenadiel\JpGraph\Plot\GroupBarPlot($barplots);
                 $graph->Add($groupedBarPlot);
-            } else {
-                $graph->Add($barplots[0]);
-            }
+            //} else {
+                //$graph->Add($barplots[0]);
+            //}
 
-            $graph->legend->SetPos(0.05, 0.15, 'right', 'top');
-            $graph->Stroke($filepath);
-            $this->console_log("Graphique qualité période libre par semaines sauvegardé: " . $filename . " (" . $chartWidth . "x" . self::CHART_HEIGHT . ")");
-            return $filename;
+            // Désactiver complètement la légende
+            $graph->legend->Hide();
+
+            $graph->Stroke($chartFilepath);
+            $this->console_log("Graphique (sans légende) sauvegardé : " . $chartFilename);
+
+            // Titre et labels adaptés pour les semaines
+            $graphTitle = 'Charge qualité par Semaine - Période du ' . $data['periode_info']['debut'] . ' au ' . $data['periode_info']['fin'];
+            $periode['titre']   = $graphTitle;
+            $periode['info']  = $data['periode_info'];
+
+            // =====================
+            //  2) LÉGENDE SEULE
+            // =====================
+            $legendGraph = new Graph(300, 100); // Petite image juste pour la légende
+            $legendGraph->SetScale('textlin');
+            $legendGraph->SetMargin(5, 5, 5, 5);
+            $legendGraph->SetFrame(false); // Pas de bordure
+
+            $barplots = [];
+            $barplot1 = new BarPlot([0]);
+            $barplot1->SetColor('darkblue');
+            $barplot1->SetFillColor('darkblue');
+            $barplot1->SetLegend('Qualité');
+            $barplots[] = $barplot1;
+
+            $barplot2 = new BarPlot([0]);
+            $barplot2->SetColor('cyan');
+            $barplot2->SetFillColor('cyan');
+            $barplot2->SetLegend('Qualité Spécialisée');
+            $barplots[] = $barplot2;
+
+            $dummyGroup = new \Amenadiel\JpGraph\Plot\GroupBarPlot($barplots);
+            $legendGraph->Add($dummyGroup);
+
+            // Positionner la légende au centre de cette petite image
+            $legendGraph->legend->SetPos(0.5, 0.5, 'center', 'center');
+            $legendGraph->legend->SetFrameWeight(1);
+
+            // Masquer axes et titre pour n'afficher que la légende
+            $legendGraph->xaxis->Hide();
+            $legendGraph->yaxis->Hide();
+            $legendGraph->title->Set('');
+
+            $legendGraph->Stroke($legendFilepath);
+            $this->console_log("Légende sauvegardée : " . $legendFilename);
+
+            $fullData = [
+                'chart'   => $chartFilename,
+                'legend'  => $legendFilename,
+                'periode' => $periode
+            ];
+
+            return $fullData;
 
         } catch (\Exception $e) {
             $this->console_log("Erreur sauvegarde qualité période libre par semaines: " . $e->getMessage());
@@ -547,7 +820,7 @@ class GraphGeneratorModel {
         $this->console_log("=== NETTOYAGE COMPLET DES GRAPHIQUES ===");
 
         try {
-            if (!is_dir(self::CHARTS_FOLDER)) {
+            if (!is_dir(self::CHARTS_FOLDER)) { die('fffdfdfdf');
                 $this->console_log("Dossier graphiques inexistant");
                 return;
             }

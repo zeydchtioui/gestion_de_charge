@@ -93,20 +93,21 @@ try {
     );
 
     $xlsxResponse = $fileApi->downloadFile($downloadxlsxRequest);
-    log_message("Fichier xlsx téléchargé depuis le cloud avec succès");
+    $this->log_message("Fichier xlsx téléchargé depuis le cloud avec succès");
 
     // 7. Enregistrer le fichier xlsx localement
-    log_message("Enregistrement du fichier xlsx localement...");
+    $this->log_message("Enregistrement du fichier xlsx localement...");
     copy($xlsxResponse->getPathName(), $xlsxOutputPath);
-    log_message("Fichier xlsx enregistré avec succès dans: " . $xlsxOutputPath);
+    $this->log_message("Fichier xlsx enregistré avec succès dans: " . $xlsxOutputPath);
+    $this->log_message("Fichier xlsx enregistré avec succès dans: " . $xlsxOutputPath);
 
     // 8. Vérifier si le fichier xlsx a été correctement enregistré
     if (file_exists($xlsxOutputPath)) {
         $xlsxSize = filesize($xlsxOutputPath);
-        log_message("Taille du fichier xlsx: " . $xlsxSize . " octets");
-        log_message("CONVERSION xlsx RÉUSSIE!");
+        $this->log_message("Taille du fichier xlsx: " . $xlsxSize . " octets");
+        $this->log_message("CONVERSION xlsx RÉUSSIE!");
     } else {
-        log_message("ERREUR: Le fichier xlsx n'a pas été trouvé sur le disque local");
+        $this->log_message("ERREUR: Le fichier xlsx n'a pas été trouvé sur le disque local");
     }
 
 } catch (Exception $e) {
@@ -114,13 +115,13 @@ try {
 
     // Afficher des détails supplémentaires sur l'erreur
     if (method_exists($e, 'getCode')) {
-        log_message("Code d'erreur: " . $e->getCode());
+        $this->log_message("Code d'erreur: " . $e->getCode());
     }
 
     if ($e instanceof \GuzzleHttp\Exception\RequestException && $e->hasResponse()) {
-        log_message("Détails de la réponse: " . $e->getResponse()->getBody()->getContents());
+        $this->log_message("Détails de la réponse: " . $e->getResponse()->getBody()->getContents());
     }
 }
 
-log_message("Fin du processus de conversion");
+$this->log_message("Fin du processus de conversion");
 ?>

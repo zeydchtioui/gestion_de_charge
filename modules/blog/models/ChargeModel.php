@@ -151,7 +151,7 @@ class ChargeModel {
         echo "<script>console.log('[ChargeModel] === PRÉPARATION DONNÉES GRAPHIQUES PAR SEMAINES ===');</script>";
 
         $mappingProcessus = [
-            'production' => ['CHAUDNQ', 'CHAUDQ', 'SOUDNQ', 'SOUDQ', 'CT'],
+            'production' => ['CHAUDNQ', 'CHAUDQ', 'SOUDNQ', 'SOUDQ', 'CT', 'USIN', 'RBT'],
             'etude' => ['CALC', 'PROJ'],
             'methode' => ['METH'],
             'qualite' => ['QUAL', 'QUALS']
@@ -172,7 +172,9 @@ class ChargeModel {
                 'CHAUDQ' => array_fill(0, $nombreJours, 0),
                 'SOUDNQ' => array_fill(0, $nombreJours, 0),
                 'SOUDQ' => array_fill(0, $nombreJours, 0),
-                'CT' => array_fill(0, $nombreJours, 0)
+                'CT' => array_fill(0, $nombreJours, 0),
+                'USIN' => array_fill(0, $nombreJours, 0),
+                'RBT' => array_fill(0, $nombreJours, 0)
             ],
             'etude' => [
                 'CALC' => array_fill(0, $nombreJours, 0),
@@ -310,7 +312,9 @@ class ChargeModel {
                 'CHAUDQ' => [],
                 'SOUDNQ' => [],
                 'SOUDQ' => [],
-                'CT' => []
+                'CT' => [],
+                'USIN' => [],
+                'RBT' => []
             ],
             'etude' => [
                 'CALC' => [],

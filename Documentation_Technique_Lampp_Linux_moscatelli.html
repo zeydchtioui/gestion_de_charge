@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation XAMPP - Moscatelli</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .logo {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .logo-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1e3c72;
+            letter-spacing: 2px;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.9em;
+            color: #2a5298;
+            margin-top: 5px;
+        }
+        
+        .header-title {
+            flex: 1;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #2a5298;
+        }
+        
+        h3 {
+            color: #2a5298;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+        
+        .command {
+            color: #50fa7b;
+        }
+        
+        .comment {
+            color: #6272a4;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th {
+            background: #2a5298;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .file-structure {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            white-space: pre;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .card {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <div class="logo-text">MOSCATELLI</div>
+                <div class="logo-subtitle">Ventilation | Chauffonnerie blanche | Usinage | Maintenance</div>
+            </div>
+            <div class="header-title">
+                <h1>Documentation Technique</h1>
+                <p>Installation et Configuration XAMPP - Système GestionCharge</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Introduction -->
+        <div class="card">
+            <h2>📋 Présentation du Projet</h2>
+            <p><strong>Projet :</strong> Système de Gestion de Charges - Moscatelli</p>
+            <p><strong>Nom du site :</strong> gestioncharge</p>
+            <p><strong>Base de données :</strong> gestioncharge_mosca</p>
+            <p><strong>Date :</strong> Décembre 2025</p>
+            
+            <h3>Spécifications Techniques</h3>
+            <table>
+                <tr>
+                    <th>Composant</th>
+                    <th>Détails</th>
+                </tr>
+                <tr>
+                    <td>Serveur Web</td>
+                    <td>Apache (XAMPP)</td>
+                </tr>
+                <tr>
+                    <td>Base de données</td>
+                    <td>MySQL/MariaDB</td>
+                </tr>
+                <tr>
+                    <td>Langage</td>
+                    <td>PHP 8.2.12</td>
+                </tr>
+                <tr>
+                    <td>Système d'exploitation</td>
+                    <td>Ubuntu Linux</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Installation XAMPP -->
+        <div class="card">
+            <h2>🔧 Installation de XAMPP sur Ubuntu</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Téléchargement de XAMPP</strong>
+            </div>
+            <div class="code-block"><code><span class="comment"># Télécharger XAMPP pour Linux</span>
+<span class="command">wget https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/8.2.12/xampp-linux-x64-8.2.12-0-installer.run</span>
+
+<span class="comment"># Rendre le fichier exécutable</span>
+<span class="command">chmod +x xampp-linux-x64-8.2.12-0-installer.run</span></code></div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Installation</strong>
+            </div>
+            <div class="code-block"><code><span class="comment"># Lancer l'installation avec les droits administrateur</span>
+<span class="command">sudo ./xampp-linux-x64-8.2.12-0-installer.run</span></code></div>
+
+            <div class="info">
+                ℹ️ Suivez les instructions de l'installateur graphique. L'installation par défaut se fait dans <code>/opt/lampp</code>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Démarrage de XAMPP</strong>
+            </div>
+            <div class="code-block"><code><span class="comment"># Démarrer tous les services</span>
+<span class="command">sudo /opt/lampp/lampp start</span>
+
+<span class="comment"># Vérifier le statut</span>
+<span class="command">sudo /opt/lampp/lampp status</span></code></div>
+
+            <div class="success">
+                ✅ Vous devriez voir : "Apache is running" et "MySQL is running"
+            </div>
+
+            <h3>Commandes Utiles XAMPP</h3>
+            <div class="code-block"><code><span class="comment"># Arrêter XAMPP</span>
+<span class="command">sudo /opt/lampp/lampp stop</span>
+
+<span class="comment"># Redémarrer XAMPP</span>
+<span class="command">sudo /opt/lampp/lampp restart</span>
+
+<span class="comment"># Démarrer uniquement Apache</span>
+<span class="command">sudo /opt/lampp/lampp startapache</span>
+
+<span class="comment"># Démarrer uniquement MySQL</span>
+<span class="command">sudo /opt/lampp/lampp startmysql</span></code></div>
+        </div>
+
+        <!-- Configuration Site -->
+        <div class="card">
+            <h2>🌐 Configuration du Site GestionCharge</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Création du dossier du site</strong>
+            </div>
+            <div class="code-block"><code><span class="comment"># Créer le dossier gestioncharge dans htdocs</span>
+<span class="command">sudo mkdir /opt/lampp/htdocs/gestioncharge</span>
+
+<span class="comment"># Définir les permissions</span>
+<span class="command">sudo chmod -R 755 /opt/lampp/htdocs/gestioncharge</span>
+<span class="command">sudo chown -R $USER:$USER /opt/lampp/htdocs/gestioncharge</span></code></div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Structure des fichiers</strong>
+            </div>
+            <div class="file-structure">gestioncharge/
+├── _assets/
+├── config/
+│   ├── cahier des charges RAF stage Antoine_Rev01.pptx
+│   ├── Config.php
+│   ├── structure_tables.sql
+│   └── .~lock.cahier des charges RAF stage Antoine_Rev01.pptx#
+├── css/
+│   ├── dashboard.css
+│   ├── excel.css
+│   └── login.css
+├── modules/
+│   └── blog/
+│       ├── controllers/
+│       │   ├── ChargeController.php
+│       │   ├── DashboardController.php
+│       │   └── LoginController.php
+│       ├── models/
+│       │   ├── converted/
+│       │   ├── AjoutChargeModel.php
+│       │   ├── ChargeModel.php
+│       │   ├── DashboardModel.php
+│       │   ├── ExcelToBdModel.php
+│       │   ├── GraphGeneratorModel.php
+│       │   ├── ImportModel.php
+│       │   ├── LectureDossierModel.php
+│       │   ├── LoginModel.php
+│       │   ├── MppConverterModel.php
+│       │   ├── ParcourstempModel.php
+│       │   └── SingletonModel.php
+│       └── views/
+├── uploads/
+│   ├── converttest.docx
+│   ├── jejenesuispasla.mpp
+│   └── mdp_alwaysdata.txt
+├── vendor/
+├── composer.json
+└── composer.lock</div>
+        </div>
+
+        <!-- Base de données -->
+        <div class="card">
+            <h2>🗄️ Configuration de la Base de Données</h2>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Accès à MySQL</strong>
+            </div>
+            <div class="code-block"><code><span class="comment"># Se connecter à MySQL</span>
+<span class="command">/opt/lampp/bin/mysql -u root -p</span>
+
+<span class="comment"># Ou via phpMyAdmin</span>
+<span class="command">http://localhost/phpmyadmin</span></code></div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Création de la base de données</strong>
+            </div>
+            <div class="code-block"><code><span class="comment">-- Créer la base de données</span>
+CREATE DATABASE gestioncharge_mosca CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+<span class="comment">-- Utiliser la base</span>
+USE gestioncharge_mosca;</code></div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Création de la table Utilisateurs</strong>
+            </div>
+            <div class="code-block"><code>CREATE TABLE Utilisateurs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'technicien', 'utilisateur') DEFAULT 'utilisateur',
+    date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    derniere_connexion TIMESTAMP NULL,
+    actif BOOLEAN DEFAULT TRUE,
+    INDEX idx_email (email),
+    INDEX idx_role (role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;</code></div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Création de la table Donnees</strong>
+            </div>
+            <div class="code-block"><code>CREATE TABLE `Donnees` (
+    `Processus` varchar(40) NOT NULL,
+    `Tache` varchar(200) NOT NULL,
+    `Charge` decimal(15,2) DEFAULT NULL,
+    `Date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;</code></div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>Insertion de données de test</strong>
+            </div>
+            <div class="code-block"><code><span class="comment">-- Insérer des utilisateurs de test</span>
+INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, role) VALUES
+('Moscatelli', 'Admin', 'admin@moscatelli.fr', MD5('Admin2024'), 'admin'),
+('Dupont', 'Jean', 'jean.dupont@moscatelli.fr', MD5('Tech2024'), 'technicien'),
+('Martin', 'Sophie', 'sophie.martin@moscatelli.fr', MD5('User2024'), 'utilisateur');
+
+<span class="comment">-- Insérer des données de test</span>
+INSERT INTO Donnees (Processus, Tache, Charge, Date) VALUES
+('Ventilation', 'Installation système ventilation Bâtiment A', 150.50, '2025-01-15'),
+('Chauffonnerie', 'Maintenance chaudière principale', 85.00, '2024-12-20'),
+('Usinage', 'Fabrication pièce spéciale client XYZ', 120.75, '2025-01-30'),
+('Maintenance', 'Contrôle annuel équipements', 45.00, '2025-02-10'),
+('Ventilation', 'Révision conduits zone production', 98.25, '2025-01-25');</code></div>
+
+            <div class="success">
+                ✅ Base de données créée avec succès !
+            </div>
+        </div>
+
+        <!-- Fichiers PHP -->
+        <div class="card">
+            <h2>📝 Fichier de Configuration PHP</h2>
+            
+            <h3>config.php</h3>
+            <div class="code-block"><code>&lt;?php
+<span class="comment">// Configuration de la connexion à la base de données Moscatelli</span>
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'gestioncharge_mosca');
+define('DB_PORT', '3306');
+
+<span class="comment">// Informations société</span>
+define('COMPANY_NAME', 'MOSCATELLI');
+define('COMPANY_SLOGAN', 'Ventilation | Chauffonnerie blanche | Usinage | Maintenance');
+
+<span class="comment">// Créer la connexion PDO</span>
+try {
+    $pdo = new PDO(
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+        DB_USER,
+        DB_PASS,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]
+    );
+} catch(PDOException $e) {
+    die("❌ Erreur de connexion à la base de données : " . $e->getMessage());
+}
+?&gt;</code></div>
+
+            <div class="warning">
+                ⚠️ <strong>Important :</strong> En production, utilisez des mots de passe sécurisés et ne stockez jamais les identifiants en clair dans le code.
+            </div>
+        </div>
+
+        <!-- Tests -->
+        <div class="card">
+            <h2>✅ Tests et Vérifications</h2>
+            
+            <h3>Vérifier l'installation</h3>
+            <ol>
+                <li>Accéder à XAMPP : <code>http://localhost</code></li>
+                <li>Accéder à phpMyAdmin : <code>http://localhost/phpmyadmin</code></li>
+                <li>Accéder au site : <code>http://localhost/gestioncharge</code></li>
+            </ol>
+
+            <h3>Vérifier la base de données</h3>
+            <div class="code-block"><code><span class="comment">-- Vérifier les tables créées</span>
+SHOW TABLES FROM gestioncharge_mosca;
+
+<span class="comment">-- Compter les enregistrements</span>
+SELECT COUNT(*) FROM Utilisateurs;
+SELECT COUNT(*) FROM Donnees;
+
+<span class="comment">-- Afficher les données</span>
+SELECT * FROM Utilisateurs;
+SELECT * FROM Donnees;</code></div>
+        </div>
+
+        <!-- Dépannage -->
+        <div class="card">
+            <h2>🔧 Dépannage</h2>
+            
+            <h3>Problème : MySQL ne démarre pas</h3>
+            <div class="code-block"><code><span class="comment"># Vérifier les logs</span>
+<span class="command">sudo tail -50 /opt/lampp/var/mysql/*.err</span>
+
+<span class="comment"># Réparer les permissions</span>
+<span class="command">sudo chown -R mysql:mysql /opt/lampp/var/mysql</span>
+
+<span class="comment"># Redémarrer</span>
+<span class="command">sudo /opt/lampp/lampp restart</span></code></div>
+
+            <h3>Problème : Erreur de connexion socket</h3>
+            <div class="info">
+                Utilisez <code>127.0.0.1</code> au lieu de <code>localhost</code> dans config.php
+            </div>
+
+            <h3>Problème : Page 404</h3>
+            <ul>
+                <li>Vérifier que XAMPP est démarré : <code>sudo /opt/lampp/lampp status</code></li>
+                <li>Vérifier les permissions du dossier gestioncharge</li>
+                <li>Vérifier que le fichier index.php existe</li>
+            </ul>
+        </div>
+
+        <!-- Sécurité -->
+        <div class="card">
+            <h2>🔒 Recommandations de Sécurité</h2>
+            
+            <div class="warning">
+                <h3>Pour la mise en production :</h3>
+                <ul>
+                    <li>Définir un mot de passe pour l'utilisateur root MySQL</li>
+                    <li>Créer un utilisateur MySQL dédié avec droits limités</li>
+                    <li>Utiliser HTTPS (SSL/TLS)</li>
+                    <li>Implémenter l'authentification des utilisateurs</li>
+                    <li>Valider toutes les entrées utilisateur</li>
+                    <li>Utiliser des requêtes préparées (PDO)</li>
+                    <li>Sauvegarder régulièrement la base de données</li>
+                </ul>
+            </div>
+
+            <h3>Créer un utilisateur MySQL dédié</h3>
+            <div class="code-block"><code><span class="comment">-- Créer un utilisateur spécifique</span>
+CREATE USER 'mosca_user'@'localhost' IDENTIFIED BY 'MotDePasseSecurise123!';
+
+<span class="comment">-- Donner les droits sur la base gestioncharge_mosca uniquement</span>
+GRANT SELECT, INSERT, UPDATE, DELETE ON gestioncharge_mosca.* TO 'mosca_user'@'localhost';
+
+<span class="comment">-- Appliquer les changements</span>
+FLUSH PRIVILEGES;</code></div>
+        </div>
+
+        <!-- Sauvegarde -->
+        <div class="card">
+            <h2>💾 Sauvegarde de la Base de Données</h2>
+            
+            <h3>Créer une sauvegarde complète</h3>
+            <div class="code-block"><code><span class="comment"># Sauvegarde de toute la base</span>
+<span class="command">/opt/lampp/bin/mysqldump -u root gestioncharge_mosca > backup_gestioncharge_$(date +%Y%m%d).sql</span>
+
+<span class="comment"># Sauvegarde compressée</span>
+<span class="command">/opt/lampp/bin/mysqldump -u root gestioncharge_mosca | gzip > backup_gestioncharge_$(date +%Y%m%d).sql.gz</span></code></div>
+
+            <h3>Restaurer une sauvegarde</h3>
+            <div class="code-block"><code><span class="comment"># Restaurer depuis un fichier SQL</span>
+<span class="command">/opt/lampp/bin/mysql -u root gestioncharge_mosca < backup_gestioncharge_20241228.sql</span></code></div>
+        </div>
+
+        <!-- Support -->
+        <div class="card">
+            <h2>📞 Support et Contact</h2>
+            
+            <table>
+                <tr>
+                    <th>Service</th>
+                    <th>Contact</th>
+                </tr>
+                <tr>
+                    <td>Support Technique</td>
+                    <td>support@moscatelli.fr</td>
+                </tr>
+                <tr>
+                    <td>Administration Système</td>
+                    <td>admin@moscatelli.fr</td>
+                </tr>
+                <tr>
+                    <td>Documentation XAMPP</td>
+                    <td>https://www.apachefriends.org/</td>
+                </tr>
+                <tr>
+                    <td>Documentation PHP</td>
+                    <td>https://www.php.net/docs.php</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>MOSCATELLI</strong></p>
+        <p>Ventilation | Chauffonnerie blanche | Usinage | Maintenance</p>
+        <p>Documentation Technique - Version 1.0 - Décembre 2025</p>
+    </div>
+</body>
+</html>

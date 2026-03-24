@@ -373,7 +373,7 @@ class LectureDossierModel {
      * @param int $currentDepth Profondeur actuelle
      * @return array|null Fichier trouvé ou null
      */
-    private function searchMppRecursively($directory, $numeroAffaire, $maxDepth = 5, $currentDepth = 0) {
+    public function searchMppRecursively($directory, $numeroAffaire, $maxDepth = 5, $currentDepth = 0) {
         // Sécurité : limiter la profondeur pour éviter les boucles infinies et les performances dégradées
         if ($currentDepth >= $maxDepth) {
             $this->console_log(" Profondeur maximale atteinte (" . $maxDepth . ") pour: " . basename($directory));

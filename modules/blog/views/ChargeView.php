@@ -57,7 +57,7 @@ class ChargeView {
      * @param array $dateRange Plage de dates disponibles dans les données
      * @return string Le contenu HTML généré
      */
-    public function showChargeAnalysis($userInfo, $fileName, $resultats, $periodData = [], $chartPaths = [], $dateRange = []) {
+    public function showChargeAnalysis($userInfo, $fileName, $resultats, $periodData = [], $chartPaths = [], $dateRange = [], $foundFilesConverted = [], $foundFilesUploads = []) {
         // Récupérer les dates actuellement sélectionnées depuis GET
         $dateDebut = $_GET['date_debut'] ?? '';
         $dateFin = $_GET['date_fin'] ?? '';
@@ -97,8 +97,19 @@ class ChargeView {
 
                 <div class="summary-box">
                     <div class="summary-title">Résumé de l'analyse</div>
+
                     <p>Période globale disponible: <?php echo htmlspecialchars($resultats['dateDebut'] ?? 'N/A'); ?> au <?php echo htmlspecialchars($resultats['dateFin'] ?? 'N/A'); ?></p>
                     <p>Fichier analysé: <?php echo htmlspecialchars($fileName); ?></p>
+                    <p>Affaires analysées converted :
+                        <?php foreach ($foundFilesConverted as $fileConverted): ?>
+                            <p><?php if ($fileConverted != '.' && $fileConverted != '..') { echo $fileConverted; } ?></p>
+                        <?php endforeach; ?>
+                    </p>
+                    <p>Affaires analysées uploads :
+                        <?php foreach ($foundFilesUploads as $fileUpload): ?>
+                    <p><?php if ($fileUpload != '.' && $fileUpload != '..') { echo $fileUpload; } ?></p>
+                        <?php endforeach; ?>
+                    </p>
                 </div>
 
                 <!-- 🆕 NOUVEAU SÉLECTEUR DE PÉRIODE LIBRE -->
@@ -182,12 +193,49 @@ class ChargeView {
                 <?php if (!empty($periodData) && !empty($chartPaths)): ?>
                     <div class="graphiques-container">
                         <h2>Évolution de la charge par semaine - Période sélectionnée</h2>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td width="50%">
+                                    <div class="period-chart-info">
+                                        <p><strong>📅 Affichage :</strong> Moyennes de charge par semaine pour la période sélectionnée</p>
+                                        <p><strong>📊 Axe X :</strong> Semaines de la période</p>
+                                        <p><strong>📈 Axe Y :</strong> Moyenne de personnes par semaine</p>
+                                    </div>
+                                </td>
+                                <td width="50%">
+                                    <div class="legend" id="legend-production">
+                                        <h3>Production - Moyennes par semaine</h3>
+                                        <h4><?php echo $chartPaths['production_periode_titre']; ?></h4>
+                                        <img src="_assets/images/<?= htmlspecialchars($chartPaths['production_legend']) ?>"
+                                             alt="Légende Production">
 
-                        <div class="period-chart-info">
-                            <p><strong>📅 Affichage :</strong> Moyennes de charge par semaine pour la période sélectionnée</p>
-                            <p><strong>📊 Axe X :</strong> Semaines de la période</p>
-                            <p><strong>📈 Axe Y :</strong> Moyenne de personnes par semaine</p>
-                        </div>
+                                    </div>
+
+                                    <div class="legend" id="legend-etude">
+                                        <h3>Étude - Moyennes par semaine</h3>
+                                        <h4><?php echo $chartPaths['etude_periode_titre']; ?></h4>
+                                        <img src="_assets/images/<?= htmlspecialchars($chartPaths['etude_legend']) ?>"
+                                             alt="Légende Étude">
+                                    </div>
+
+                                    <div class="legend" id="legend-methode">
+                                        <h3>Méthode - Moyennes par semaine</h3>
+                                        <h4><?php echo $chartPaths['methode_periode_titre']; ?></h4>
+                                        <img src="_assets/images/<?= htmlspecialchars($chartPaths['methode_legend']) ?>"
+                                             alt="Légende Méthode">
+                                    </div>
+
+                                    <div class="legend" id="legend-qualite">
+                                        <h3>Qualité - Moyennes par semaine</h3>
+                                        <h4><?php echo $chartPaths['qualite_periode_titre']; ?></h4>
+                                        <img src="_assets/images/<?= htmlspecialchars($chartPaths['qualite_legend']) ?>"
+                                             alt="Légende Qualité">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
                         <!-- BOUTONS DE SÉLECTION DES GRAPHIQUES -->
                         <div class="graphiques-tabs">
@@ -205,29 +253,38 @@ class ChargeView {
                             </button>
                         </div>
 
-                        <!-- CONTAINER AVEC DÉFILEMENT HORIZONTAL -->
-                        <div class="charts-scroll-container">
+                        <!-- CONTAINER AVEC DÉFILEMENT HORIZONTAL BLOC SAMIR -->
+<!--                        <h3>Production - Moyennes par semaine</h3>-->
+                        <div class="charts-scroll-container" >
                             <div class="charts-content">
+
                                 <!-- GRAPHIQUE PRODUCTION (affiché par défaut) -->
                                 <div id="chart-production" class="graphique-section chart-content">
-                                    <h3>Production - Moyennes par semaine</h3>
-                                    <?php if (!empty($chartPaths['production'])): ?>
-                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['production']); ?>"
+
+                                    <div class="charts-scroll-container" >
+
+                                    <?php if (!empty($chartPaths['production_chart'])): ?>
+
+                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['production_chart']); ?>"
                                              alt="Graphique charge Production par semaine" class="chart-image">
-                                        <p class="chart-description">Moyennes hebdomadaires : Chaudronnerie, Soudure et Contrôle</p>
+
+                                        <?php echo htmlspecialchars($chartPaths['periode']); ?>
+
+                                        <p class="chart-description">Moyennes hebdomadaires : Chaudronnerie, Soudure, Contrôle, Usinage et Robot</p>
                                     <?php else: ?>
                                         <div class="chart-placeholder">
                                             <p>Aucune donnée de production pour cette période</p>
                                             <small>Sélectionnez une autre période ou vérifiez les données</small>
                                         </div>
                                     <?php endif; ?>
+                                    </div>
                                 </div>
 
                                 <!-- GRAPHIQUE ÉTUDE (masqué par défaut) -->
                                 <div id="chart-etude" class="graphique-section chart-content hidden">
-                                    <h3>Étude - Moyennes par semaine</h3>
-                                    <?php if (!empty($chartPaths['etude'])): ?>
-                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['etude']); ?>"
+<!--                                    <h3>Étude - Moyennes par semaine</h3>-->
+                                    <?php if (!empty($chartPaths['etude_chart'])): ?>
+                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['etude_chart']); ?>"
                                              alt="Graphique charge Étude par semaine" class="chart-image">
                                         <p class="chart-description">Moyennes hebdomadaires : Calcul et Projet</p>
                                     <?php else: ?>
@@ -240,8 +297,10 @@ class ChargeView {
 
                                 <!-- GRAPHIQUE MÉTHODE (masqué par défaut) -->
                                 <div id="chart-methode" class="graphique-section chart-content hidden">
-                                    <h3>Méthode - Moyennes par semaine</h3>
-                                    <?php if (!empty($chartPaths['methode'])): ?>
+<!--                                    <h3>Méthode - Moyennes par semaine</h3>-->
+                                    <img src="_assets/images/<?= htmlspecialchars($chartPaths['legende']) ?>"
+                                         alt="Légende Étude">
+                                    <?php if (!empty($chartPaths['methode_chart'])): ?>
                                         <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['methode']); ?>"
                                              alt="Graphique charge Méthode par semaine" class="chart-image">
                                         <p class="chart-description">Moyennes hebdomadaires : Méthode</p>
@@ -255,9 +314,9 @@ class ChargeView {
 
                                 <!-- GRAPHIQUE QUALITÉ (masqué par défaut) -->
                                 <div id="chart-qualite" class="graphique-section chart-content hidden">
-                                    <h3>Qualité - Moyennes par semaine</h3>
-                                    <?php if (!empty($chartPaths['qualite'])): ?>
-                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['qualite']); ?>"
+<!--                                    <h3>Qualité - Moyennes par semaine</h3>-->
+                                    <?php if (!empty($chartPaths['qualite_chart'])): ?>
+                                        <img src="_assets/images/<?php echo htmlspecialchars($chartPaths['qualite_chart']); ?>"
                                              alt="Graphique charge Qualité par semaine" class="chart-image">
                                         <p class="chart-description">Moyennes hebdomadaires : Qualité et Qualité Spécialisée</p>
                                     <?php else: ?>
@@ -300,6 +359,18 @@ class ChargeView {
                         const selectedChart = document.getElementById('chart-' + chartType);
                         if (selectedChart) {
                             selectedChart.classList.remove('hidden');
+                        }
+
+                        // Désactiver toutes les legendes
+                        const allLegend = document.querySelectorAll('.legend');
+                        allLegend.forEach(legend => {
+                            legend.classList.add('hidden');
+                        });
+
+                        // Afficher la légende sélectionnée
+                        const selectedLegend = document.getElementById('legend-' + chartType);
+                        if (selectedChart) {
+                            selectedLegend.classList.remove('hidden');
                         }
 
                         // Activer le bouton sélectionné
@@ -346,7 +417,7 @@ class ChargeView {
                                     📅 Période à analyser : ${debut.toLocaleDateString('fr-FR')} → ${fin.toLocaleDateString('fr-FR')}
                                     (≈ ${workingDaysApprox} jours ouvrés, ≈ ${weeksApprox} semaine(s))
                                 </span>
-                                ${warningText}
+
                             `;
                         }
                     }
@@ -645,12 +716,26 @@ class ChargeView {
             /* 🆕 STYLES POUR LE DÉFILEMENT HORIZONTAL */
             .charts-scroll-container {
                 width: 100%;
-                overflow-x: auto;
-                overflow-y: hidden;
+                overflow-x: hidden;  /* ← plus de scroll horizontal */
+                overflow-y: visible;
                 border: 2px solid #ddd;
                 border-radius: 8px;
                 background-color: #fafafa;
                 margin-bottom: 20px;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0 20px;
+                box-sizing: border-box;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .charts-content {
@@ -659,9 +744,9 @@ class ChargeView {
             }
 
             .chart-image {
-                width: auto; /* Largeur variable selon la période */
-                height: 450px; /* Hauteur fixe */
-                max-width: none; /* Permettre de dépasser la largeur du container */
+                width: 100%;        /* ← prend toute la largeur disponible */
+                height: auto;       /* ← hauteur proportionnelle */
+                max-width: 100%;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -676,10 +761,18 @@ class ChargeView {
                 border-left: 4px solid #4CAF50;
             }
 
-            .period-chart-info p {
+            .period-chart-info p{
                 margin: 5px 0;
                 font-size: 14px;
                 color: #555;
+            }
+
+            .legend {
+                margin: 20px 0;
+                padding: 15px;
+                background-color: #f5f5f5;
+                border-radius: 6px;
+                border-left: 4px solid #4CAF50;
             }
 
             /* Message si aucune période */

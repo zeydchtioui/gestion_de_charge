@@ -19,10 +19,16 @@ class Config
      */
     public function getDatabaseConfig(): array
     {
+//        return [
+//            'dsn' => 'mysql:host=mysql-thevenaut.alwaysdata.net;dbname=thevenaut_mosca;charset=utf8',
+//            'username' => 'thevenaut',
+//            'password' => 'Arceus2004',
+//        ];
+
         return [
-            'dsn' => 'mysql:host=mysql-thevenaut.alwaysdata.net;dbname=thevenaut_mosca;charset=utf8',
-            'username' => 'thevenaut',
-            'password' => 'Arceus2004',
+            'dsn' => 'mysql:host=localhost;dbname=gestioncharge_mosca;charset=utf8',
+            'username' => 'root',
+            'password' => '',
         ];
     }
 }

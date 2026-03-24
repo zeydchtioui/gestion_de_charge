@@ -4,6 +4,7 @@ namespace modules\blog\controllers;
 use modules\blog\models\DashboardModel;
 use modules\blog\models\ChargeModel;
 use modules\blog\models\GraphGeneratorModel;
+use modules\blog\models\LectureDossierModel;
 use modules\blog\views\ChargeView;
 
 /**
@@ -17,6 +18,10 @@ class ChargeController {
     private $chargeModel;
     private $graphGenerator;
     private $chargeView;
+
+    const MPP_SOURCE_FOLDER = __DIR__ . '/../../../uploads';
+
+    const XLSX_OUTPUT_FOLDER = __DIR__ . '/../models/converted';
 
     /**
      * Constructeur du ChargeController
@@ -82,6 +87,13 @@ class ChargeController {
 
             echo "<script>console.log(' ÉTAPE 4: Affichage de la page avec graphiques par semaines');</script>";
 
+            $lectureDossierModel = new LectureDossierModel();
+
+            $foundFilesConverted = $lectureDossierModel->searchMppRecursively(self::MPP_SOURCE_FOLDER, null, 5);
+            $foundFilesUploads = $lectureDossierModel->searchMppRecursively(self::XLSX_OUTPUT_FOLDER, null, 5);
+
+
+
             // Afficher les résultats avec le nouveau système par semaines
             echo $this->chargeView->showChargeAnalysis(
                 $userInfo,
@@ -89,7 +101,9 @@ class ChargeController {
                 $resultatsFormattés,
                 $periodSelection['periodData'] ?? [],
                 $periodSelection['chartPaths'] ?? [],
-                $dateRange
+                $dateRange,
+                $foundFilesConverted,
+                $foundFilesUploads
             );
 
         } catch (\Exception $e) {
@@ -151,9 +165,16 @@ class ChargeController {
         $chartPaths = $this->graphGenerator->generatePeriodCharts($periodData['graphiquesData']);
         echo "<script>console.log(' Graphiques par semaines générés: " . count($chartPaths) . " fichiers');</script>";
 
+        $lectureDossierModel = new LectureDossierModel();
+
+        $foundFilesConverted = $lectureDossierModel->searchMppRecursively(self::MPP_SOURCE_FOLDER, null, 5);
+        $foundFilesUploads = $lectureDossierModel->searchMppRecursively(self::XLSX_OUTPUT_FOLDER, null, 5);
+
         return [
             'periodData' => $periodData,
-            'chartPaths' => $chartPaths
+            'chartPaths' => $chartPaths,
+            'foundFilesConverted' => $foundFilesConverted,
+            'foundFilesUploads' => $foundFilesUploads
         ];
     }
 
